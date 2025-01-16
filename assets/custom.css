@@ -1,0 +1,36 @@
+/* custom.css */
+*, 
+::after,
+::before{
+    box-sizing: border-box;
+}
+
+/* @media (width <= 1250px) {
+    .alert-heading{
+        font-size: 10px;
+    }
+} */
+@media screen and (max-width: 1250px) {
+    .alert-heading {
+        font-weight: lighter;
+        /* font-size: 10px; */
+    }
+}
+
+ 
+.alert {
+    border-radius: 0 !important;
+
+}
+.text-primary.nav-link{
+    border-radius: 0%;
+}
+
+.text-primary.nav-link.active{
+    background-color: #D3D3D3; /* Change this to your desired color */
+    color: white; /* Optional: Adjust text color when active */
+    border-radius: 0%;
+}
+.dcclink{
+    text-decoration: none;
+}

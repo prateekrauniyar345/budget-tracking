@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log Input Values</title>
+    <!-- Include CSS for styling -->
+    <style>
+        .match {
+            border-color: green;
+        }
+        .no-match {
+            border-color: red;
+        }
+    </style>
+</head>
+<body>
+    <h1>Log Values on Keystroke</h1>
+    <form>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password"><br><br>
+
+        <label for="confirm-password">Confirm Password:</label>
+        <input type="password" id="confirm-password" name="confirm-password"><br><br>
+
+        <button type="submit">Submit</button>
+    </form>
+
+    <!-- Include JavaScript -->
+    <script>
+        // JavaScript to compare passwords and log values
+        document.addEventListener('DOMContentLoaded', function () {
+            const passwordField = document.getElementById('password');
+            const confirmPasswordField = document.getElementById('confirm-password');
+
+            function validatePassword() {
+                const password = passwordField.value;
+                const confirmPassword = confirmPasswordField.value;
+
+                // Log values to the console
+                console.log(Password: ${password});
+                console.log(Confirm Password: ${confirmPassword});
+
+                if (password === confirmPassword && password !== "") {
+                    confirmPasswordField.classList.remove('no-match');
+                    confirmPasswordField.classList.add('match');
+                } else {
+                    confirmPasswordField.classList.remove('match');
+                    confirmPasswordField.classList.add('no-match');
+                }
+            }
+
+            // Attach the input event to both fields
+            passwordField.addEventListener('input', validatePassword);
+            confirmPasswordField.addEventListener('input', validatePassword);
+        });
+    </script>
+</body>
+</html>

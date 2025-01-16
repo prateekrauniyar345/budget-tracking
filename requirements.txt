@@ -1,0 +1,8 @@
+flask 
+dash
+psycopg2-binary
+pandas
+flask-bcrypt
+dash-bootstrap-components
+python-dotenv
+

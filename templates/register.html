@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            background-color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        *, ::after, ::before {
+            box-sizing: border-box;
+        }
+
+        .form-container {
+            margin-top: 15rem;
+            width: 40%;
+            max-width: 25rem;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20rem;
+        }
+        h2 {
+            margin-bottom: 20px;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            margin-top: 10px;
+            padding: 10px 15px;
+            width: 100%;
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .login{
+            margin-top: 10px;
+            text-align: center;
+        }
+        .match {
+            /* border-color: green; */
+            border: 3px solid green ;
+        }
+        .no-match {
+            /* border-color: red; */
+            border: 3px solid red;
+        }
+        /* input:focus {
+            outline: none;
+        } */
+        .error_message{
+            display: block;
+            text-align: center;
+         }
+         .error-message {
+            color: red;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h2>Register</h2>
+        <form method="POST" action="/validate_register">
+            <input type="text" name="firstname" placeholder="Enter your first name" id = "first_name"  required>
+            <input type="text" name="lastname" placeholder="Enter your last name" id = "last_name"  required>
+            <input type="text" name="username" placeholder="Enter your username" id = "username"  required>
+            <input type="email" name="email" placeholder="Enter your email" id = "email"  required>
+            <input type="password" name="password" placeholder="Enter your password" id = "password"  required>
+            <input type="password" name="confirm_password" placeholder="Confirm your password" id = "confirm_password"  required>
+            <button type="submit">Register</button>
+        </form>
+        <div class="login">
+            <a href="/login">Already a member, Login?</a>
+        </div>
+        <div class="error_message">
+            <!-- Display error or success messages -->
+                {% if error %}
+                    <p class="error-message">{{ error }}</p>
+                {% endif %}
+        </div>
+    </div>
+    <br>
+   
+
+    <script>  
+        document.addEventListener('DOMContentLoaded', function () {
+            const passwordField = document.getElementById('password');
+            const confirmPasswordField = document.getElementById('confirm_password');
+
+            function validatePassword() {
+                const password = passwordField.value;
+                const confirmPassword = confirmPasswordField.value;
+
+
+                if (password === confirmPassword && password !== "") {
+                    confirmPasswordField.classList.remove('no-match');
+                    confirmPasswordField.classList.remove('no-match');
+                    confirmPasswordField.classList.add('match');
+                } else {
+                    confirmPasswordField.classList.remove('match');
+                    confirmPasswordField.classList.add('no-match');
+                }
+            }
+            function remove_outline(){
+                this.style.outline = 'none';
+            }
+
+            
+            // passwordField.addEventListener('focus', function(){
+            //     this.style.outline = 'none';
+            // })
+            confirmPasswordField.addEventListener('focus', function(){
+                this.style.outline = 'none';
+            })
+            passwordField.addEventListener('input', validatePassword);
+            confirmPasswordField.addEventListener('input', validatePassword);
+        });
+    </script>
+</body>
+</html>
