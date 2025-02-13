@@ -4,6 +4,13 @@ from flask_bcrypt import Bcrypt
 import os
 from dotenv import load_dotenv
 from psycopg2.extras import RealDictCursor
+from flask_login import LoginManager, login_user, current_user
+# from app import db , login_manager
+from model import User
+from sqlalchemy.exc import SQLAlchemyError
+
+
+
 # realdictCursor ensures that the results are returned as a dictionary, 
 # making them easy to convert them into json format. 
 
@@ -11,9 +18,41 @@ import datetime
 
 # load the .env files
 load_dotenv()
-
+login_manager = LoginManager()
 bcrypt = Bcrypt()
 
+@login_manager.user_loader
+def load_user(user_id):
+    # print("user id is : " , User.query.get(user_id))
+    return User.query.get(user_id)  
+
+# print("current user from auth_and_reg sis : ", current_user)
+
+
+def validate_login():
+    email = request.form['email']
+    password = request.form['password']
+    # password = bcrypt.generate_password_hash(password)
+    success_msg = "User logged in successfully."
+    error_msg = "User login unsuccessful."
+
+    try:
+        # Query the user by email
+        user = User.query.filter_by(email=email).first()
+        # print("user is  user is: ", user)
+
+        # Check if the user exists and the password matches
+        if user and bcrypt.check_password_hash(user.password_hash, password):
+            login_user(user)  # Log the user in
+            return True, success_msg
+        else:
+            return False, error_msg
+    except SQLAlchemyError as error:
+        print("Database error:", str(error))
+        return False, "Error connecting to the database"
+
+
+'''
 def validate_login():
     email = request.form['email']
     password = request.form['password']
@@ -38,7 +77,9 @@ def validate_login():
                 if user:
                     if bcrypt.check_password_hash(user['password_hash'], password):
                         print("Login successful.")
-                        return True, "Login successful"
+                        login_user(user)
+                        print("login_user is ", login_user(user))
+                        return True, "Login successful" 
                     else:
                         print("Incorrect password.")
                         return False, "Incorrect password. Please try again."
@@ -50,7 +91,7 @@ def validate_login():
     except (Exception, psycopg2.Error) as error:
         print("Error connecting to the database:", str(error))
         return False, "Error connecting to the database"
-
+'''
 
 def validate_register():
     first_name = request.form['firstname']
@@ -112,3 +153,5 @@ def validate_register():
     except (Exception, psycopg2.Error) as error:
         print("Error connecting to the database:", str(error))
         return False, "Error connecting to the database"
+
+

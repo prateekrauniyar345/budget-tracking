@@ -1,7 +1,7 @@
 from flask import Flask, url_for, request, redirect, render_template, flash, session
 import psycopg2
 from flask_bcrypt import Bcrypt
-from auth_and_reg.auth_and_reg  import validate_login, validate_register
+from auth_and_reg  import validate_login, validate_register
 import os
 from dotenv import load_dotenv
 import pandas
@@ -11,17 +11,42 @@ import plotly.express as px
 import dash_bootstrap_components as dbc
 import dash
 from dash.exceptions import PreventUpdate
-
+from flask_sqlalchemy import SQLAlchemy
+from model import db
+from auth_and_reg import login_manager, load_user
+from flask_login import current_user
 
 # load the environment variables
 load_dotenv()
 
+
+
 app  = Flask(__name__)
 bcrypt = Bcrypt(app)
+# login_manager = LoginManager()
+login_manager.init_app(app)
+
 app.secret_key = os.getenv('SECRET_KEY')
+
+# Database configuration for PostgreSQL
+username = os.getenv('DATABASE_USERNAME')
+password = os.getenv('DATABASE_PWD')
+database = os.getenv('DATABASE_URL')
+port = os.getenv('DATABASE_PORT')
+
+
+# Set the PostgreSQL database URI
+app.config['SQLALCHEMY_DATABASE_URI'] = f"postgresql+psycopg2://{username}:{password}@localhost:{port}/{database}"
+# Disable SQLAlchemy event system to save memory and resources
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+db.init_app(app)
+
 
 @app.route('/')
 def main():
+    print("Current user:", current_user)
+    # print("current user name is : ",current_user.first_name)
     return redirect(url_for('login'))
 
 @app.route('/login')
@@ -56,7 +81,11 @@ def validate_reg():
 
 @app.route('/home')
 def home():
+    # print("current user is " , current_user.username)
     return redirect('/home/dashboard')  # Redirect to a specific Dash page
+
+
+# print("current user from auth_and_reg sis : ", current_user)
 
 # Initialize Dash app
 dash_app = dash.Dash(__name__, 
@@ -77,7 +106,7 @@ navbar = dbc.Nav(
         html.Hr(),  # Add a horizontal rule to separate main options from user-related options
         dbc.NavLink("Profile", href="/home/profile", active="exact", className="text-primary"),
         dbc.NavLink("Settings", href="/home/settings", active="exact", className="text-primary"),
-        dbc.NavLink("Logout", href="#", active="exact", className="text-danger"),  # Highlight logout for emphasis
+        dbc.NavLink("Logout", href="/home/logout", active="exact", className="text-danger"),  # Highlight logout for emphasis
     ],
     vertical=True,
     pills=True,
@@ -239,11 +268,13 @@ def change_dash_app_heading(url):
         return "Accounts"
     elif url == "/home/goals":
         return "Goals"
-    
+    elif url == "/home/profile":
+        return f"Hello {current_user.first_name}!"
+    elif url == "/home/settings":
+        return "Settings"
+    elif url == "/home/logout":
+        return "logout"
     return "Welcome!"  # Default message
-
-
-
 
 
 
@@ -253,4 +284,8 @@ pages = [page for page in dash.page_registry.values()]
 
 if __name__ ==  '__main__':
     app.run(debug=True)
+    with app.app_context():
+        db.create_all()
+      
+   
    

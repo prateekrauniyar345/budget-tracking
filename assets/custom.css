@@ -34,3 +34,18 @@
 .dcclink{
     text-decoration: none;
 }
+
+/* Styling for .text-danger class */
+.text-danger.nav-link{
+    color: blue;
+    font-size: 1.1rem; /* Slightly larger text for emphasis */
+    text-transform: uppercase; 
+    letter-spacing: 1px; /* Space out letters for clarity */
+}
+
+.text-danger.nav-link.active {
+    background-color: #D3D3D3; /* Change this to your desired color */
+    color: white; /* Optional: Adjust text color when active */
+    border-radius: 0%;
+    font-weight: bold;
+}

@@ -66,3 +66,57 @@ my_dash_app/
 4. Run the app with `python app.py`.
 
 This structure ensures your Dash app remains organized and scalable.
+
+
+
+
+
+
+
+
+
+
+---------------------------------------------------------------------------------------------------------------------------------
+
+
+The method `__repr__()` in Python is a special method used to define how an object is represented as a string when it is printed or logged. It is often used to provide a "formal" or "official" string representation of an object, which can be helpful for debugging and logging purposes.
+
+### Here's a breakdown of the method:
+
+```python
+def __repr__(self):
+    return f'<User {self.username}>'
+```
+
+- **`__repr__(self)`**: This is a special method in Python (called a dunder method) that is used to represent an object as a string. It's automatically called when you try to print the object or use `repr()` on it.
+  
+- **`f'<User {self.username}>'`**: This uses an f-string to format the string. The `{self.username}` part is replaced with the actual value of the `username` attribute of the `User` object.
+
+So, when you print a `User` object, it will output something like:
+
+```
+<User john_doe>
+```
+
+This is a helpful string representation because it provides insight into the object (e.g., displaying the username of the user). In case you have a collection of `User` objects, seeing the username in the output helps identify them more easily.
+
+For example, if you had a `User` object `user1` with the `username` "john_doe," calling `repr(user1)` or printing `user1` would give you:
+
+```
+<User john_doe>
+```
+
+If you don’t implement `__repr__()`, Python will use the default string representation, which might look something like:
+
+```
+<__main__.User object at 0x7f90e23c02b0>
+```
+
+This default representation doesn't tell you much about the object itself. By defining `__repr__()`, you make the string representation more informative.
+
+
+
+
+
+
+
