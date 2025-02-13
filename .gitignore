@@ -21,3 +21,8 @@ __pycache__/
 # Other generated files
 *.sqlite3
 instance/
+
+
+
+# ignore thr ipynb file
+*.ipynb
